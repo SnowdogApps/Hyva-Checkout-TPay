@@ -1,0 +1,16 @@
+{
+	"name": "snowdog/module-hyva-checkout-tpay",
+	"description": "Hyva Checkout compatybility module for TPay",
+	"type": "magento2-module",
+	"require": {
+		"tpaycom/magento2basic": "*"
+	},
+	"autoload": {
+		"files": [
+			"src/registration.php"
+		],
+		"psr-4": {
+			"Snowdog\\Hyva\\Checkout\\TPay": "src"
+		}
+	}
+}
