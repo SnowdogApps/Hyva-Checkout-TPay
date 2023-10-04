@@ -62,10 +62,19 @@ use Magento\Framework\View\Element\Template;
             <p>Choose a payment method</p>
             <div id="groups_v" class="tpay-panel-inside-content">
                 <div id="bank-selection-form" class="tpay-groups-wrapper">
+                    <?php foreach ($magewire->getChannels() as $channel): ?>
+                        <button class="tpay-group-holder tpay-with-logo" id="bank-<?= $channel['id'] ?>"
+                                wire:click="$set('group', <?= $channel['id'] ?>)">
+                            <div class="tpay-group-name"><?= $channel['name'] ?></div>
+                            <div class="tpay-group-logo-holder">
+                                <img src="<?= $channel['img'] ?>" class="tpay-group-logo" alt="<?= $channel['name'] ?>">
+                            </div>
+                        </button>
+                    <?php endforeach ?>
                 </div>
             </div>
-            <input type="hidden" id="tpay-channel-input" name="tpay-channel-input"/>
         </div>
+        <input type="hidden" id="tpay-channel-input" name="tpay-channel-input"/>
     </div>
     <span><?= $magewire->addCss() ?></span>
 

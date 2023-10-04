@@ -3,13 +3,16 @@
 namespace Snowdog\Hyva\Checkout\TPay\Payment\Method;
 
 use Magento\Checkout\Model\Session as SessionCheckout;
+use Magento\Framework\App\Cache;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magewirephp\Magewire\Component;
 use tpaycom\magento2basic\Model\TpayConfigProvider;
 
 class TPay extends Component
 {
-    public ?string $group = '';
+    const CACHE_KEY = 'tpay_channels';
+
+    public ?int $group = 0;
 
     public ?string $blikCode = '';
 
@@ -18,14 +21,15 @@ class TPay extends Component
     public function __construct(
         private readonly SessionCheckout         $sessionCheckout,
         private readonly CartRepositoryInterface $quoteRepository,
-        private readonly TpayConfigProvider      $tpayConfigProvider,
+        private readonly TpayConfigProvider      $tPayConfigProvider,
+        private readonly Cache                   $cache
     ) {
     }
 
     public function mount(): void
     {
         $data = $this->sessionCheckout->getQuote()->getPayment()->getAdditionalInformation();
-        $this->group = $data['group'] ?? '';
+        $this->group = $data['group'] ?? 0;
         $this->blikCode = $data['blik_code'] ?? '';
         $this->acceptTos = $data['accept_tos'] ?? false;
     }
@@ -43,13 +47,30 @@ class TPay extends Component
 
     public function addCss()
     {
-        return $this->tpayConfigProvider->createCSS('tpaycom_magento2basic::css/tpay.css');
+        return $this->tPayConfigProvider->createCSS('tpaycom_magento2basic::css/tpay.css');
     }
 
     public function getTerms()
     {
-        return $this->tpayConfigProvider->getTerms();
+        return $this->tPayConfigProvider->getTerms();
     }
 
+    public function getChannels()
+    {
+        $cached = $this->cache->load(self::CACHE_KEY);
+        if ($cached) {
+            $cached = json_decode($cached, true);
+            if ($cached) {
+                return $cached;
+            }
+        }
+        $config = $this->tPayConfigProvider->getConfig();
+        $merchantId = $config['tpay']['payment']['merchantId'];
+        $online = $config['tpay']['payment']['onlyOnlineChannels'];
+        $url = 'https://secure.tpay.com/groups-' . $merchantId . ($online ? '1' : '0') . '.js?json';
+        $data = file_get_contents($url);
+        $this->cache->save($data, self::CACHE_KEY);
 
+        return json_decode($data, true);
+    }
 }

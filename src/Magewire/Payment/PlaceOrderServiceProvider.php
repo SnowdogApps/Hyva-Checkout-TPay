@@ -9,19 +9,16 @@ use tpaycom\magento2basic\Model\Tpay;
 
 class PlaceOrderServiceProvider extends AbstractPlaceOrderService
 {
-    /**
-     * @var Tpay
-     */
-    private $tpay;
-
-    public function __construct(CartManagementInterface $cartManagement, Tpay $tpay)
-    {
+    public function __construct(
+        CartManagementInterface          $cartManagement,
+        private readonly Tpay            $tPay,
+    ) {
         parent::__construct($cartManagement);
-        $this->tpay = $tpay;
     }
+
 
     public function getRedirectUrl(Quote $quote, ?int $orderId = null): string
     {
-        return $this->tpay->getPaymentRedirectUrl();
+        return $this->tPay->getPaymentRedirectUrl();
     }
 }
