@@ -2,21 +2,24 @@
 
 namespace Snowdog\Hyva\Checkout\TPay\Payment\Method;
 
+use Hyva\Checkout\Model\Magewire\Component\EvaluationInterface;
+use Hyva\Checkout\Model\Magewire\Component\EvaluationResultFactory;
+use Hyva\Checkout\Model\Magewire\Component\EvaluationResultInterface;
 use Magento\Checkout\Model\Session as SessionCheckout;
 use Magento\Framework\App\Cache;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magewirephp\Magewire\Component;
 use tpaycom\magento2basic\Model\TpayConfigProvider;
 
-class TPay extends Component
+class TPay extends Component implements EvaluationInterface
 {
-    const CACHE_KEY = 'tpay_channels';
+    private const CACHE_KEY = 'tpay_channels';
 
-    public ?int $group = 0;
+    public int $group = 0;
 
-    public ?string $blikCode = '';
+    public string $blikCode = '';
 
-    public ?bool $acceptTos = false;
+    public bool $acceptTos = false;
 
     public function __construct(
         private readonly SessionCheckout         $sessionCheckout,
@@ -45,11 +48,6 @@ class TPay extends Component
         return $value;
     }
 
-    public function addCss()
-    {
-        return $this->tPayConfigProvider->createCSS('tpaycom_magento2basic::css/tpay.css');
-    }
-
     public function getTerms()
     {
         return $this->tPayConfigProvider->getTerms();
@@ -72,5 +70,26 @@ class TPay extends Component
         $this->cache->save($data, self::CACHE_KEY);
 
         return json_decode($data, true);
+    }
+
+    public function evaluateCompletion(EvaluationResultFactory $resultFactory): EvaluationResultInterface
+    {
+        if ($this->sessionCheckout->getQuote()->getPayment()->getMethod() != 'tpaycom_magento2basic') {
+            return $resultFactory->createSuccess();
+        }
+
+        if (!empty($this->blikCode) && strlen($this->blikCode) != 6) {
+            return $resultFactory->createBlocking(__('Invalid BLIK code'));
+        }
+
+        if (empty($this->blikCode) && $this->group < 1) {
+            return $resultFactory->createBlocking(__('Payment method not selected'));
+        }
+
+        if (!$this->acceptTos) {
+            return $resultFactory->createBlocking(__('TOS not accepted'));
+        }
+
+        return $resultFactory->createSuccess();
     }
 }

@@ -26,12 +26,12 @@ use Magento\Framework\View\Element\Template;
                     <img src="https://secure.tpay.com/_/banks/b64.png"/>
                     <div class="tpay-row">
                         <p>
-                            Type in 6 digit code and press pay to commit blik payment.
+                            <?= $escaper->escapeHtml(__('Type in 6 digit code and press pay to commit blik payment.')) ?>
                         </p>
                         <div class="tpay-input-blik-code">
                             <div class="tpay-input-wrapper">
                                 <div class="tpay-input-label">
-                                    BLIK code
+                                    <?= $escaper->escapeHtml(__('BLIK code')) ?>
                                 </div>
                                 <input id="blik_code"
                                        name="blik_code"
@@ -59,7 +59,7 @@ use Magento\Framework\View\Element\Template;
                 </div>
                 <div class="tpay-header-belt"></div>
             </div>
-            <p>Choose a payment method</p>
+            <p><?= $escaper->escapeHtml(__('Choose a payment method')) ?></p>
             <div id="groups_v" class="tpay-panel-inside-content">
                 <div id="bank-selection-form" class="tpay-groups-wrapper">
                     <?php foreach ($magewire->getChannels() as $channel): ?>
@@ -76,14 +76,13 @@ use Magento\Framework\View\Element\Template;
         </div>
         <input type="hidden" id="tpay-channel-input" name="tpay-channel-input"/>
     </div>
-    <span><?= $magewire->addCss() ?></span>
 
     <div class="checkout-agreements-block">
 
         <div class="TpayRegulations">
             <input type="checkbox" checked name="accept_tos" id="accept_tos" wire:model="acceptTos"/>
             <label for="accept_tos">
-                <a target="_blank" href="<?= $magewire->getTerms() ?>">I do accept tpay.com service regulations</a>.
+                <a target="_blank" href="<?= $magewire->getTerms() ?>"><?= $escaper->escapeHtml(__('I do accept tpay.com service regulations')) ?></a>.
             </label>
         </div>
     </div>
