@@ -4,6 +4,7 @@
 	<module name="Snowdog_HyvaCheckoutTPay">
 		<sequence>
 			<module name="tpaycom_magento2basic" />
+			<module name="Hyva_CompatModuleFallback"/>
 		</sequence>
 	</module>
 </config>
