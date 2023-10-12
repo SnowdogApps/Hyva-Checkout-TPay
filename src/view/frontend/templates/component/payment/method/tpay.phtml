@@ -60,7 +60,7 @@ $issuers = $magewire->getIssuers();
                                         tabindex="1"
                                         value=""
                                         class="tpay-input-value tpay-blik-input"
-                                        wire:model.delay.250ms="blikCode"
+                                        wire:model.debounce.800ms="blikCode"
                                     />
                                 </div>
                             </div>
