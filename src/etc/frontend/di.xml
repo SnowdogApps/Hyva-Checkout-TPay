@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Hyva\Checkout\Model\Magewire\Payment\PlaceOrderServiceProvider">
+        <arguments>
+            <argument name="placeOrderServiceList" xsi:type="array">
+                <item name="tpaycom_magento2basic"
+                      xsi:type="object">Snowdog\Hyva\Checkout\TPay\Magewire\Payment\PlaceOrderServiceProvider
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Hyva\CompatModuleFallback\Model\CompatModuleRegistry">
+        <arguments>
+            <argument name="compatModules" xsi:type="array">
+                <item name="hyva-magento2-snowdog-tpay" xsi:type="array">
+                    <item name="original_module" xsi:type="string">tpaycom_magento2basic</item>
+                    <item name="compat_module" xsi:type="string">Snowdog_HyvaCheckoutTPay</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

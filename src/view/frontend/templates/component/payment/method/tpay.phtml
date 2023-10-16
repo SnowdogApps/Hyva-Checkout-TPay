@@ -1,0 +1,154 @@
+<?php
+declare(strict_types=1);
+
+/** @var Template $block */
+/** @var TPay $magewire */
+/** @var Escaper $escaper */
+
+use Snowdog\Hyva\Checkout\TPay\Payment\Method\TPay;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+$issuers = $magewire->getIssuers();
+?>
+<div>
+    <div
+        class="col-span-6"
+        x-data="{
+            showChannelsSection: true,
+            channelID: null,
+        }"
+        wire:payment-method="tpaycom_magento2basic"
+        x-effect="$refs.blikCode.value
+            ? showChannelsSection = false
+            : showChannelsSection = true
+        "
+    >
+        <div class="tpay-insidebg">
+            <div class="blik">
+                <div class="tpay-header-wrapper">
+                    <div class="tpay-header-logo">
+                        <img
+                            class="tpay-logo min-h-[90px] !pt-0"
+                            src="https://tpay.com/img/banners/tpay_logo_white.svg"
+                        />
+                    </div>
+                    <div class="tpay-header-belt"></div>
+                </div>
+                <div class="tpay-panel-inside-content">
+                    <div class="tpay-channel-form-wrapper tpay-content-wrapper-class">
+                        <img src="https://secure.tpay.com/_/banks/b64.png"/>
+                        <div class="tpay-row">
+                            <p>
+                                <?= $escaper->escapeHtml(__('Type in 6 digit code and press pay to commit blik payment.')) ?>
+                            </p>
+                            <div class="tpay-input-blik-code">
+                                <div class="tpay-input-wrapper">
+                                    <div class="tpay-input-label">
+                                        <?= $escaper->escapeHtml(__('BLIK code')) ?>
+                                    </div>
+                                    <input
+                                        x-ref="blikCode"
+                                        id="blik_code"
+                                        name="blik_code"
+                                        pattern="\d*"
+                                        type="tel"
+                                        autocomplete="off"
+                                        maxlength="6"
+                                        minlength="6"
+                                        placeholder="000000"
+                                        tabindex="1"
+                                        value=""
+                                        class="tpay-input-value tpay-blik-input"
+                                        wire:model.debounce.800ms="blikCode"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                id="tpay-basic-main-payment"
+                x-show="showChannelsSection"
+                x-cloak
+                x-collapse
+            >
+                <div class="tpay-header-wrapper">
+                    <div class="tpay-header-logo">
+                        <img
+                            class="tpay-logo min-h-[90px] !pt-0"
+                            src="https://tpay.com/img/banners/tpay_logo_white.svg"
+                        />
+                    </div>
+                    <div class="tpay-header-belt"></div>
+                </div>
+                <p class="pl-3 pt-2">
+                    <?= $escaper->escapeHtml(__('Choose a payment method')) ?>
+                </p>
+                <div
+                    id="groups_v"
+                    class="tpay-panel-inside-content"
+                >
+                    <div
+                        id="bank-selection-form"
+                        class="tpay-groups-wrapper"
+                    >
+                        <?php foreach ($magewire->getChannels() as $channel): ?>
+                            <button
+                                class="tpay-group-holder tpay-with-logo"
+                                :class="channelID === '<?= $channel['name'] ?>' ? 'tpay-active' : ''"
+                                id="bank-<?= $channel['id'] ?>"
+                                wire:click="$set('group', <?= $channel['id'] ?>)"
+                                @click="channelID = '<?= $channel['name'] ?>'"
+                            >
+                                <div class="tpay-group-name">
+                                    <?= $channel['name'] ?>
+                                </div>
+                                <div class="tpay-group-logo-holder">
+                                    <img
+                                        src="<?= $channel['img'] ?>"
+                                        class="tpay-group-logo mx-auto"
+                                        alt="<?= $channel['name'] ?>"
+                                    >
+                                </div>
+                            </button>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+            </div>
+            <input
+                type="hidden"
+                id="tpay-channel-input"
+                name="tpay-channel-input"
+            />
+        </div>
+        <div class="checkout-agreements-block">
+            <div class="TpayRegulations">
+                <input
+                    class="cursor-pointer"
+                    type="checkbox"
+                    checked
+                    name="accept_tos"
+                    id="accept_tos"
+                    wire:model="acceptTos"
+                />
+                <label for="accept_tos">
+                    <span>
+                        <?= $escaper->escapeHtml(__('I do accept')) ?>
+                    </span>
+                    <a
+                        class="link link-secondary"
+                        target="_blank"
+                        href="<?= $magewire->getTerms() ?>"
+                    >
+                        <?= $escaper->escapeHtml(__('regulations of')) ?>
+                    </a>
+                    <span>
+                        <?= $escaper->escapeHtml(__('tpay.com')) ?>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
