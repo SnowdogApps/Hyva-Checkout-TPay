@@ -32,7 +32,7 @@ class TPay extends Component implements EvaluationInterface
     public function mount(): void
     {
         $data = $this->sessionCheckout->getQuote()->getPayment()->getAdditionalInformation();
-        $this->group = $data['group'] ?? 0;
+        $this->group = (int) $data['group'] ?? 0;
         $this->blikCode = $data['blik_code'] ?? '';
         $this->acceptTos = $data['accept_tos'] ?? false;
     }

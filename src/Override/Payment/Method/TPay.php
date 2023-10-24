@@ -9,7 +9,11 @@ class TPay extends BaseMethod
 {
     public function assignData(DataObject $data)
     {
-        $additionalData = $data->getData('additional_data')['additional_information'];
+        $additionalData = $data->getData('additional_data');
+        if (isset($additionalData['additional_information'])) {
+            $additionalData = $additionalData['additional_information'];
+        }
+
         $info = $this->getInfoInstance();
 
         $info->setAdditionalInformation(
