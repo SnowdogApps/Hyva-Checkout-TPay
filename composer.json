@@ -3,7 +3,7 @@
 	"description": "Hyva Checkout compatybility module for TPay",
 	"type": "magento2-module",
 	"require": {
-		"tpaycom/magento2basic": "*"
+		"tpaycom/magento2basic": "^1.5.2"
 	},
 	"autoload": {
 		"files": [
