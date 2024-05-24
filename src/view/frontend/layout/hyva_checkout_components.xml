@@ -4,12 +4,43 @@
 >
     <body>
         <referenceBlock name="checkout.payment.methods">
-            <block name="checkout.payment.method.tpaycom_magento2basic"
-                   as="tpaycom_magento2basic"
+            <block name="checkout.payment.method.Tpay_Magento2"
+                   as="Tpay_Magento2"
                    template="Snowdog_HyvaCheckoutTPay::component/payment/method/tpay.phtml">
                 <arguments>
                     <argument name="magewire" xsi:type="object">
                         Snowdog\Hyva\Checkout\TPay\Payment\Method\TPay
+                    </argument>
+                </arguments>
+            </block>
+            <block name="checkout.payment.method.Tpay_Magento2_Cards"
+                   as="Tpay_Magento2_Cards"
+                   template="Snowdog_HyvaCheckoutTPay::component/payment/method/tpay_card_wrapper.phtml">
+                <block name="checkout.payment.method.Tpay_Magento2_Cards.Cards"
+                       as="cards"
+                       template="Snowdog_HyvaCheckoutTPay::component/payment/method/tpay_card.phtml">
+                    <arguments>
+                        <argument name="magewire" xsi:type="object">
+                            Snowdog\Hyva\Checkout\TPay\Payment\Method\TPayCard
+                        </argument>
+                    </arguments>
+                </block>
+                <block name="checkout.payment.method.Tpay_Magento2_Cards.Form"
+                       as="form"
+                       template="Snowdog_HyvaCheckoutTPay::component/payment/method/tpay_card_form.phtml">
+                    <arguments>
+                        <argument name="viewModel" xsi:type="object">
+                            \Snowdog\Hyva\Checkout\TPay\ViewModel\TpayCards
+                        </argument>
+                    </arguments>
+                </block>
+            </block>
+            <block name="checkout.payment.method.generic"
+                   as="generic"
+                   template="Snowdog_HyvaCheckoutTPay::component/payment/method/tpay_generic.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">
+                        Snowdog\Hyva\Checkout\TPay\Payment\Method\TPayGeneric
                     </argument>
                 </arguments>
             </block>

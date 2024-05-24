@@ -1,0 +1,70 @@
+<?php
+declare(strict_types=1);
+
+/** @var Template $block */
+/** @var TPayCard $magewire */
+
+/** @var Escaper $escaper */
+
+use Snowdog\Hyva\Checkout\TPay\Payment\Method\TPayCard;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+?>
+<div wire:payment-method="Tpay_Magento2">
+    <div class="card_insidebg">
+        <div  class="card_tpay-panel-inside-content">
+            <div id="saved_card_payment" style="visibility: visible" class="tpay-cards-choice">
+                <?php if ($magewire->canSaveCC()): ?>
+                    <?php foreach ($magewire->getTokens() as $token): ?>
+                        <input wire:model="saved" type="radio" name="savedId" id="cardN<?= $token['tokenId'] ?>" onchange="window.dispatchEvent(new CustomEvent('tpay-card-new'))"
+                               value="<?= $token['tokenId'] ?>" <?php if ($magewire->saved == $token['tokenId']): ?> checked <?php endif ?> />
+                        <label for="cardN<?= $token['tokenId'] ?>" name="-<?= $token['vendor'] ?>">
+                            <?= __('Pay with saved card ') ?>
+                            <?= $token['cardShortCode'] ?>
+                            <div style="display: inline-block; vertical-align: middle;" class="tpay-<?= $token['vendor'] ?>-icon"></div>
+                        </label><br/>
+                    <?php endforeach ?>
+                <?php endif ?>
+
+                <input x-data wire:model="saved" type="radio" name="savedId" id="newCard" onchange="window.dispatchEvent(new CustomEvent('tpay-card-new'))"
+                       value="new_card" <?php if ($magewire->saved == "new_card"): ?> checked <?php endif ?> />
+                <label for="newCard"><?= __('Pay with a new card') ?>
+                    <?php if(!empty($magewire->suffix)): ?>
+                        ( **** <?= $magewire->suffix ?>
+                        <div style="display: inline-block; vertical-align: middle;" class="<?= $magewire->type ?>"></div> )
+                    <?php endif ?>
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="checkout-agreements-block">
+        <div class="TpayRegulations">
+            <input
+                    class="cursor-pointer"
+                    type="checkbox"
+                    checked
+                    name="accept_tos"
+                    id="accept_tos"
+                    wire:model="acceptTos"
+            />
+            <label for="accept_tos">
+                    <span>
+                        <?= $escaper->escapeHtml(__('I do accept')) ?>
+                    </span>
+                <a
+                        class="link link-secondary"
+                        target="_blank"
+                        href="<?= $magewire->getTerms() ?>"
+                >
+                    <?= $escaper->escapeHtml(__('regulations of')) ?>
+                </a>
+                <span>
+                        <?= $escaper->escapeHtml(__('tpay.com')) ?>
+                    </span>
+            </label>
+        </div>
+    </div>
+</div>

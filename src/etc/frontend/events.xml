@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd"
 >
-    <event name="hyva_config_generate_before">
-        <observer name="Snowdog_HyvaCheckoutTPay" instance="Hyva\Widgets\Observer\RegisterModuleForHyvaConfig"/>
+    <event name="layout_generate_blocks_after">
+        <observer name="Snowdog_HyvaCheckoutTPay_GenerateBlocksAfter" instance="Snowdog\Hyva\Checkout\TPay\Observer\LayoutGenerateBlockAfter" />
     </event>
 </config>

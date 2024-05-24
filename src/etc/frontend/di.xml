@@ -4,11 +4,19 @@
     <type name="Hyva\Checkout\Model\Magewire\Payment\PlaceOrderServiceProvider">
         <arguments>
             <argument name="placeOrderServiceList" xsi:type="array">
-                <item name="tpaycom_magento2basic"
+                <item name="Tpay_Magento2"
+                      xsi:type="object">Snowdog\Hyva\Checkout\TPay\Magewire\Payment\PlaceOrderServiceProvider
+                </item>
+                <item name="Tpay_Magento2_Cards"
+                      xsi:type="object">Snowdog\Hyva\Checkout\TPay\Magewire\Payment\PlaceOrderServiceProvider
+                </item>
+                <item name="generic"
                       xsi:type="object">Snowdog\Hyva\Checkout\TPay\Magewire\Payment\PlaceOrderServiceProvider
                 </item>
             </argument>
         </arguments>
+        <plugin name="hyva-snowdog-tpay-payment-names"
+                type="Snowdog\Hyva\Checkout\TPay\Plugin\GenericPaymentName" />
     </type>
     <type name="Hyva\CompatModuleFallback\Model\CompatModuleRegistry">
         <arguments>

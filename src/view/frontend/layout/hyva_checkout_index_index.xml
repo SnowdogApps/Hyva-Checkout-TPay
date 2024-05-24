@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="tpaycom_magento2basic::css/tpay.css" />
+        <css src="Tpay_Magento2::css/tpay.css" />
+        <css src="Tpay_Magento2::css/tpaycards.css" />
+        <script src="Tpay_Magento2::js/jsencrypt.min.js" />
     </head>
 </page>

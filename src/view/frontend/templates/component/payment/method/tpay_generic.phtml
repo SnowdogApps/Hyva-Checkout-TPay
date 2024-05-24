@@ -1,0 +1,41 @@
+<?php
+declare(strict_types=1);
+
+/** @var Template $block */
+/** @var TPayGeneric $magewire */
+/** @var Escaper $escaper */
+
+use Snowdog\Hyva\Checkout\TPay\Payment\Method\TPayGeneric;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+?>
+<div>
+    <div class="checkout-agreements-block">
+        <div class="TpayRegulations">
+            <input
+                    class="cursor-pointer"
+                    type="checkbox"
+                    checked
+                    name="accept_tos"
+                    id="accept_tos"
+                    wire:model="acceptTos"
+            />
+            <label for="accept_tos">
+                    <span>
+                        <?= $escaper->escapeHtml(__('I do accept')) ?>
+                    </span>
+                <a
+                        class="link link-secondary"
+                        target="_blank"
+                        href="<?= $magewire->getTerms() ?>"
+                >
+                    <?= $escaper->escapeHtml(__('regulations of')) ?>
+                </a>
+                <span>
+                        <?= $escaper->escapeHtml(__('tpay.com')) ?>
+                    </span>
+            </label>
+        </div>
+    </div>
+</div>
