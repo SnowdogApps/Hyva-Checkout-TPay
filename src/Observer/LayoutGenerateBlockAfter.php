@@ -27,6 +27,9 @@ class LayoutGenerateBlockAfter implements ObserverInterface
             $genericMethods = $this->scopeConfig->getValue(
                 'payment/tpaycom_magento2basic/openapi_settings/onsite_channels'
             );
+            if (empty($genericMethods)) {
+                return;
+            }
             $genericMethods = explode(",", $genericMethods);
             foreach ($genericMethods as $method) {
                 if (!$parentBlock->getChildBlock('generic-' . $method)) {
