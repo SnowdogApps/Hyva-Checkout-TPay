@@ -66,7 +66,7 @@ class TPay extends Component implements EvaluationInterface
         $merchantId = $this->tPayConfigProvider->getMerchantId();
         $online = $this->tPayConfigProvider->onlyOnlineChannels();
         $url = 'https://secure.tpay.com/groups-' . $merchantId . ($online ? '1' : '0') . '.js?json';
-        $data = file_get_contents($url);
+        $data = @file_get_contents($url);
         $this->cache->save($data, self::CACHE_KEY);
 
         return json_decode($data, true);
