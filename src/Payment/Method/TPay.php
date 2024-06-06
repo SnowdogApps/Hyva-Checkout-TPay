@@ -65,7 +65,9 @@ class TPay extends Component implements EvaluationInterface
 
         $merchantId = $this->tPayConfigProvider->getMerchantId();
         $online = $this->tPayConfigProvider->onlyOnlineChannels();
-        $url = 'https://secure.tpay.com/groups-' . $merchantId . ($online ? '1' : '0') . '.js?json';
+        $isSandbox = $this->tPayConfigProvider->useSandboxMode();
+        $host = $isSandbox ? 'https://secure.sandbox.tpay.com/' : 'https://secure.tpay.com/';
+        $url = $host . 'groups-' . $merchantId . ($online ? '1' : '0') . '.js?json';
         $json = @file_get_contents($url);
         $data = json_decode($json, true);
         if (empty($data)) {
@@ -73,7 +75,7 @@ class TPay extends Component implements EvaluationInterface
         }
         $this->cache->save($json, self::CACHE_KEY);
 
-        return json_decode($data, true);
+        return $data;
     }
 
     public function evaluateCompletion(EvaluationResultFactory $resultFactory): EvaluationResultInterface
