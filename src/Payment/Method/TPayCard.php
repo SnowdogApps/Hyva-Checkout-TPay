@@ -92,11 +92,13 @@ class TPayCard extends Component implements EvaluationInterface
         }
 
         if (!$this->acceptTos) {
-            return $resultFactory->createBlocking(__('TOS not accepted'));
+            return $resultFactory->createErrorMessageEvent(__('TOS not accepted'))
+                ->withCustomEvent('payment:method:error');
         }
 
         if (empty($this->token) && $this->saved == 'new_card') {
-            return $resultFactory->createBlocking(__('No card data'));
+            return $resultFactory->createErrorMessageEvent(__('No card data'))
+                ->withCustomEvent('payment:method:error');
         }
 
         return $resultFactory->createSuccess();
