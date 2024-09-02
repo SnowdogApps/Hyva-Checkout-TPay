@@ -85,15 +85,18 @@ class TPay extends Component implements EvaluationInterface
         }
 
         if (!empty($this->blikCode) && strlen($this->blikCode) != 6) {
-            return $resultFactory->createBlocking(__('Invalid BLIK code'));
+            return $resultFactory->createErrorMessageEvent(__('Invalid BLIK code'))
+                ->withCustomEvent('payment:method:error');
         }
 
         if (empty($this->blikCode) && $this->group < 1) {
-            return $resultFactory->createBlocking(__('Payment method not selected'));
+            return $resultFactory->createErrorMessageEvent(__('Payment method not selected'))
+                ->withCustomEvent('payment:method:error');
         }
 
         if (!$this->acceptTos) {
-            return $resultFactory->createBlocking(__('TOS not accepted'));
+            return $resultFactory->createErrorMessageEvent(__('TOS not accepted'))
+                ->withCustomEvent('payment:method:error');
         }
 
         return $resultFactory->createSuccess();
