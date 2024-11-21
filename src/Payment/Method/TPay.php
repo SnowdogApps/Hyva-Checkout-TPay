@@ -80,7 +80,7 @@ class TPay extends Component implements EvaluationInterface
 
     public function evaluateCompletion(EvaluationResultFactory $resultFactory): EvaluationResultInterface
     {
-        if ($this->sessionCheckout->getQuote()->getPayment()->getMethod() != 'tpaycom_magento2basic') {
+        if ($this->sessionCheckout->getQuote()->getPayment()->getMethod() != 'Tpay_Magento2') {
             return $resultFactory->createSuccess();
         }
 
