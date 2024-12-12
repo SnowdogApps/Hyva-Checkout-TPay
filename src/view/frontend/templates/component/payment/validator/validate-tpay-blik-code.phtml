@@ -1,0 +1,11 @@
+<script>
+    hyvaCheckout.evaluation.registerValidator('validateTPayBlikCode', async (element, component) => {
+        return new Promise(resolve => {
+            let blikCode = component.get('blikCode');
+            if ('' != blikCode && blikCode.toString().length < 6) {
+                resolve(false);
+            }
+            resolve(true);
+        })
+    })
+</script>

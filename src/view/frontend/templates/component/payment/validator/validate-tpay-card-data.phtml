@@ -1,0 +1,12 @@
+<script>
+    hyvaCheckout.evaluation.registerValidator('validateTPayCardData', async (element, component) => {
+        return new Promise(resolve => {
+            let token = component.get('token');
+            let saved = component.get('saved');
+            if ('' == token && saved == 'new_card') {
+                resolve(false);
+            }
+            resolve(true);
+        })
+    })
+</script>
