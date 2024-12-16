@@ -1,11 +1,11 @@
 <script>
-    hyvaCheckout.evaluation.registerValidator('validateTPayTOS', async (element, component) => {
-        return new Promise(resolve => {
+    window.addEventListener('checkout:init:evaluation', event => {
+        hyvaCheckout.evaluation.registerValidator('validateTPayTOS', (element, component) => {
             let acceptTos = component.get('acceptTos');
             if (false == acceptTos) {
-                resolve(false);
+                return false;
             }
-            resolve(true);
+            return true;
         })
     })
 </script>

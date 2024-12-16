@@ -1,11 +1,11 @@
 <script>
-    hyvaCheckout.evaluation.registerValidator('validateTPayBlikCode', async (element, component) => {
-        return new Promise(resolve => {
+    window.addEventListener('checkout:init:evaluation', event => {
+        hyvaCheckout.evaluation.registerValidator('validateTPayBlikCode', (element, component) => {
             let blikCode = component.get('blikCode');
             if ('' != blikCode && blikCode.toString().length < 6) {
-                resolve(false);
+                return false;
             }
-            resolve(true);
+            return true;
         })
     })
 </script>
