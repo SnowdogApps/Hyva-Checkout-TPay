@@ -2,7 +2,7 @@
     window.addEventListener('checkout:init:evaluation', event => {
         hyvaCheckout.evaluation.registerValidator('validateTPayBlikCode', (element, component) => {
             let blikCode = component.get('blikCode');
-            if ('' != blikCode && blikCode.toString().length < 6) {
+            if ('' != blikCode && !!blikCode && blikCode.toString().length < 6) {
                 return false;
             }
             return true;

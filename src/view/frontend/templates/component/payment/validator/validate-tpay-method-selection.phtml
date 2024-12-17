@@ -3,7 +3,7 @@
         hyvaCheckout.evaluation.registerValidator('validateTPayMethodSelection', (element, component) => {
             let blikCode = component.get('blikCode');
             let group = component.get('group');
-            if ('' == blikCode && group < 1) {
+            if (!blikCode && group < 1) {
                 return false;
             }
             return true;
