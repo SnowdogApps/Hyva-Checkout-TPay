@@ -49,8 +49,9 @@ class TPayGeneric extends Component implements EvaluationInterface
         }
 
         if (!$this->acceptTos) {
-            return $resultFactory->createErrorMessageEvent(__('TOS not accepted'))
+            $errorMessageEvent = $resultFactory->createErrorMessageEvent(__('TOS not accepted'))
                 ->withCustomEvent('payment:method:error');
+            return $resultFactory->createValidation('validateTPayTOS')->withFailureResult($errorMessageEvent);
         }
 
         return $resultFactory->createSuccess();
