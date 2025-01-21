@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [2.1.00] - 2024-09-02
+- fix blocking place order button
+
 ## [2.0.0] - 2024-05-28
 - support for new base module version
 
