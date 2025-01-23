@@ -41,29 +41,24 @@ use Magento\Framework\View\Element\Template;
     </div>
 
     <div class="checkout-agreements-block">
-        <div class="TpayRegulations">
+        <div class="TpayRegulations tpay-regulations-offset">
             <input
                     class="cursor-pointer"
                     type="checkbox"
                     checked
                     name="accept_tos"
                     id="accept_tos"
-                    wire:model="acceptTos"
             />
             <label for="accept_tos">
-                    <span>
-                        <?= $escaper->escapeHtml(__('I do accept')) ?>
-                    </span>
-                <a
-                        class="link link-secondary"
-                        target="_blank"
-                        href="<?= $magewire->getTerms() ?>"
-                >
-                    <?= $escaper->escapeHtml(__('regulations of')) ?>
-                </a>
+                <span><?= $escaper->escapeHtml(__('By paying, you accept ')) ?></span>
+                <a target="_blank" href="<?= $escaper->escapeUrl($magewire->getTerms()) ?>"><?= $escaper->escapeHtml(__('regulations')) ?></a>.<br>
                 <span>
-                        <?= $escaper->escapeHtml(__('tpay.com')) ?>
-                    </span>
+                        <?= $escaper->escapeHtml(__(
+                                                     'The personal data administrator is Krajowy Integrator Płatności S.A with its registered office in Poznań. '
+                                                 ))
+                        ?>
+                    </span><br>
+                <a target="_blank" href="<?= $escaper->escapeUrl($magewire->getRegulations()) ?>"><?= $escaper->escapeHtml(__('Show full content')) ?></a>.
             </label>
         </div>
     </div>

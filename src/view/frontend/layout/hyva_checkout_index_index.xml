@@ -11,8 +11,6 @@
                    template="Snowdog_HyvaCheckoutTPay::component/payment/validator/validate-tpay-blik-code.phtml"/>
             <block name="hyva.checkout.init-evaluation.validate-tpay-method-selection"
                    template="Snowdog_HyvaCheckoutTPay::component/payment/validator/validate-tpay-method-selection.phtml"/>
-            <block name="hyva.checkout.init-evaluation.validate-tpay-tos"
-                   template="Snowdog_HyvaCheckoutTPay::component/payment/validator/validate-tpay-tos.phtml"/>
             <block name="hyva.checkout.init-evaluation.validate-tpay-card-data"
                    template="Snowdog_HyvaCheckoutTPay::component/payment/validator/validate-tpay-card-data.phtml"/>
         </referenceContainer>

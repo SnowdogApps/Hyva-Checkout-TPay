@@ -13,8 +13,6 @@ use Tpay\Magento2\Service\TpayTokensService;
 
 class TPayCard extends Component implements EvaluationInterface
 {
-    public bool $acceptTos = false;
-
     public string|int $saved = "";
 
     public string $token = "";
@@ -38,13 +36,12 @@ class TPayCard extends Component implements EvaluationInterface
         $data = $this->sessionCheckout->getQuote()->getPayment()->getAdditionalInformation();
         $this->token = $data['card_data'] ?? '';
         $this->saved = $data['card_id'] ?? 'new_card';
-        $this->acceptTos = $data['accept_tos'] ?? false;
     }
 
     public function updated($value, $name)
     {
         $quote = $this->sessionCheckout->getQuote();
-        $quote->getPayment()->setAdditionalInformation('accept_tos', $this->acceptTos);
+        $quote->getPayment()->setAdditionalInformation('accept_tos', true);
         $quote->getPayment()->setAdditionalInformation('card_data', $this->saved == "new_card" ? $this->token : null);
         $quote->getPayment()->setAdditionalInformation('card_id', $this->saved == "new_card" ? null : $this->saved);
         if ($this->save && $this->saved == "new_card") {
@@ -71,6 +68,11 @@ class TPayCard extends Component implements EvaluationInterface
         return $this->tPayConfigProvider->getTermsURL();
     }
 
+    public function getRegulations()
+    {
+        return $this->tPayConfigProvider->getRegulationsURL();
+    }
+
     public function preserveToken(string $token, string $type, string $suffix, bool $save): void
     {
         $this->token = $token;
@@ -89,12 +91,6 @@ class TPayCard extends Component implements EvaluationInterface
     {
         if ($this->sessionCheckout->getQuote()->getPayment()->getMethod() != 'Tpay_Magento2_Cards') {
             return $resultFactory->createSuccess();
-        }
-
-        if (!$this->acceptTos) {
-            $errorMessageEvent = $resultFactory->createErrorMessageEvent(__('TOS not accepted'))
-                ->withCustomEvent('payment:method:error');
-            return $resultFactory->createValidation('validateTPayTOS')->withFailureResult($errorMessageEvent);
         }
 
         if (empty($this->token) && $this->saved == 'new_card') {

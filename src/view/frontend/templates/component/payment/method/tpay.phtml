@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 /** @var Template $block */
 /** @var TPay $magewire */
+
 /** @var Escaper $escaper */
 
 use Snowdog\Hyva\Checkout\TPay\Payment\Method\TPay;
@@ -30,7 +31,9 @@ $issuers = $magewire->getIssuers();
                     <div class="tpay-channel-form-wrapper tpay-content-wrapper-class">
                         <img src="https://secure.tpay.com/_/banks/b64.png"/>
                         <p>
-                            <?= $escaper->escapeHtml(__('Type in 6 digit code and press pay to commit blik payment.')) ?>
+                            <?= $escaper->escapeHtml(
+                                __('Type in 6 digit code and press pay to commit blik payment.')
+                            ) ?>
                         </p>
                         <div class="tpay-input-blik-code">
                             <div class="tpay-input-wrapper">
@@ -104,29 +107,24 @@ $issuers = $magewire->getIssuers();
             />
         </div>
         <div class="checkout-agreements-block">
-            <div class="TpayRegulations">
+            <div class="TpayRegulations tpay-regulations-offset">
                 <input
                         class="cursor-pointer"
                         type="checkbox"
                         checked
                         name="accept_tos"
                         id="accept_tos"
-                        wire:model="acceptTos"
                 />
                 <label for="accept_tos">
+                    <span><?= $escaper->escapeHtml(__('By paying, you accept ')) ?></span>
+                    <a target="_blank" href="<?= $escaper->escapeUrl($magewire->getTerms()) ?>"><?= $escaper->escapeHtml(__('regulations')) ?></a>.<br>
                     <span>
-                        <?= $escaper->escapeHtml(__('I do accept')) ?>
-                    </span>
-                    <a
-                            class="link link-secondary"
-                            target="_blank"
-                            href="<?= $magewire->getTerms() ?>"
-                    >
-                        <?= $escaper->escapeHtml(__('regulations of')) ?>
-                    </a>
-                    <span>
-                        <?= $escaper->escapeHtml(__('tpay.com')) ?>
-                    </span>
+                        <?= $escaper->escapeHtml(__(
+                            'The personal data administrator is Krajowy Integrator Płatności S.A with its registered office in Poznań. '
+                                                 ))
+                        ?>
+                    </span><br>
+                    <a target="_blank" href="<?= $escaper->escapeUrl($magewire->getRegulations()) ?>"><?= $escaper->escapeHtml(__('Show full content')) ?></a>.
                 </label>
             </div>
         </div>

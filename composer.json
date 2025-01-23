@@ -5,7 +5,7 @@
 	"require": {
 		"hyva-themes/magento2-compat-module-fallback": "*",
 		"php": "^8.1",
-		"tpaycom/magento2basic": "^2.0.4"
+		"tpaycom/magento2basic": "^2.0.8"
 	},
 	"autoload": {
 		"files": [

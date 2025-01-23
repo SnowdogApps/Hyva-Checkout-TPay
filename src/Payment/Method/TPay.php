@@ -19,8 +19,6 @@ class TPay extends Component implements EvaluationInterface
 
     public string $blikCode = '';
 
-    public bool $acceptTos = false;
-
     public function __construct(
         private readonly SessionCheckout         $sessionCheckout,
         private readonly CartRepositoryInterface $quoteRepository,
@@ -34,7 +32,6 @@ class TPay extends Component implements EvaluationInterface
         $data = $this->sessionCheckout->getQuote()->getPayment()->getAdditionalInformation();
         $this->group = (int) ($data['group'] ?? 0);
         $this->blikCode = $data['blik_code'] ?? '';
-        $this->acceptTos = $data['accept_tos'] ?? false;
     }
 
     public function updated($value, $name)
@@ -42,7 +39,7 @@ class TPay extends Component implements EvaluationInterface
         $quote = $this->sessionCheckout->getQuote();
         $quote->getPayment()->setAdditionalInformation('group', $this->group);
         $quote->getPayment()->setAdditionalInformation('blik_code', $this->blikCode);
-        $quote->getPayment()->setAdditionalInformation('accept_tos', $this->acceptTos);
+        $quote->getPayment()->setAdditionalInformation('accept_tos', true);
         $this->quoteRepository->save($quote);
 
         return $value;
@@ -51,6 +48,11 @@ class TPay extends Component implements EvaluationInterface
     public function getTerms()
     {
         return $this->tPayConfigProvider->getTermsURL();
+    }
+
+    public function getRegulations()
+    {
+        return $this->tPayConfigProvider->getRegulationsURL();
     }
 
     public function getChannels()
@@ -94,12 +96,6 @@ class TPay extends Component implements EvaluationInterface
             $errorMessageEvent = $resultFactory->createErrorMessageEvent(__('Payment method not selected'))
                 ->withCustomEvent('payment:method:error');
             return $resultFactory->createValidation('validateTPayMethodSelection')->withFailureResult($errorMessageEvent);
-        }
-
-        if (!$this->acceptTos) {
-            $errorMessageEvent = $resultFactory->createErrorMessageEvent(__('TOS not accepted'))
-                ->withCustomEvent('payment:method:error');
-            return $resultFactory->createValidation('validateTPayTOS')->withFailureResult($errorMessageEvent);
         }
 
         return $resultFactory->createSuccess();

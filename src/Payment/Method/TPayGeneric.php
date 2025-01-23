@@ -12,8 +12,6 @@ use Tpay\Magento2\Provider\ConfigurationProvider;
 
 class TPayGeneric extends Component implements EvaluationInterface
 {
-    public bool $acceptTos = false;
-
     public function __construct(
         private readonly SessionCheckout         $sessionCheckout,
         private readonly CartRepositoryInterface $quoteRepository,
@@ -24,14 +22,13 @@ class TPayGeneric extends Component implements EvaluationInterface
     public function mount(): void
     {
         $data = $this->sessionCheckout->getQuote()->getPayment()->getAdditionalInformation();
-        $this->acceptTos = $data['accept_tos'] ?? false;
     }
 
     public function updated($value, $name)
     {
         $quote = $this->sessionCheckout->getQuote();
         $quote->getPayment()->setAdditionalInformation('group', null);
-        $quote->getPayment()->setAdditionalInformation('accept_tos', $this->acceptTos);
+        $quote->getPayment()->setAdditionalInformation('accept_tos', true);
         $this->quoteRepository->save($quote);
 
         return $value;
@@ -42,16 +39,15 @@ class TPayGeneric extends Component implements EvaluationInterface
         return $this->tPayConfigProvider->getTermsURL();
     }
 
+    public function getRegulations()
+    {
+        return $this->tPayConfigProvider->getRegulationsURL();
+    }
+
     public function evaluateCompletion(EvaluationResultFactory $resultFactory): EvaluationResultInterface
     {
         if (!preg_match('/^generic-[0-9]+$/', $this->sessionCheckout->getQuote()->getPayment()->getMethod())) {
             return $resultFactory->createSuccess();
-        }
-
-        if (!$this->acceptTos) {
-            $errorMessageEvent = $resultFactory->createErrorMessageEvent(__('TOS not accepted'))
-                ->withCustomEvent('payment:method:error');
-            return $resultFactory->createValidation('validateTPayTOS')->withFailureResult($errorMessageEvent);
         }
 
         return $resultFactory->createSuccess();
